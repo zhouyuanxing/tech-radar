@@ -1,0 +1,82 @@
+# ===========================================
+# 个人技术雷达 - 应用配置文件
+# ===========================================
+
+spring:
+  application:
+    name: tech-radar
+  
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/tech_radar?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: your_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 连接池配置
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  # JPA 配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        use_sql_comments: true
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# GitHub API 配置
+github:
+  api:
+    base-url: https://api.github.com
+    # GitHub Search API 端点
+    trending-url: https://api.github.com/search/repositories
+    # API 超时时间（毫秒）
+    timeout: 5000
+    # 请求头配置（用于认证）
+    headers:
+      Accept: application/vnd.github.v3+json
+    # 如果需要认证，取消下面的注释并填入 Token
+    # token: your_github_token_here
+
+# Hacker News API 配置
+hackernews:
+  api:
+    base-url: https://hacker-news.firebaseio.com/v0
+    # 获取热门故事数量
+    top-stories-count: 50
+    # API 超时时间
+    timeout: 5000
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.techradar: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/tech-radar.log
+
+# 定时任务配置
+scheduling:
+  # GitHub 采集任务：每天早上8点执行
+  github:
+    cron: "0 0 8 * * ?"
+  # Hacker News 采集任务：每天早上9点执行
+  hackernews:
+    cron: "0 0 9 * * ?"
